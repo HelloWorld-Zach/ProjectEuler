@@ -1,0 +1,18 @@
+#Largest Collatz Sequence
+
+collatz <- function(integer){
+  counter <- 1
+  while(integer != 1){
+    if(integer %% 2 == 0){
+      integer <- prod(integer, 0.5)
+      counter <- counter + 1
+    }
+    else {
+      integer <- prod(3, integer) + 1
+      counter <- counter + 1
+    }
+  }
+  return(counter)
+}
+
+which.max(map_dbl(1:1000000, ~ collatz(.))) #kinda slow but not terrible 
