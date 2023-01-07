@@ -1,0 +1,26 @@
+#Dijkstra's Algorithm 
+
+input <- readLines("dijkstras.txt")
+grid <- array(0, dim = c(80,80))
+for(i in 1:80){
+  grid[i, ] <- as.integer(str_split(input[i], ",")[[1]])
+}
+
+costs = array(Inf, dim = c(80,80)) #we initialize with all infinite costs 
+costs[1,1] <- 4445
+unvisited <- array(1, dim =c(80,80)) #all of our nodes begin as unvisited 
+end <- 80^2 #once we populate the end node (minimum cost to reach that node we break our loop)
+current <- 1 #first node is 1
+repeat{
+  current <- which(costs == min(costs[which(unvisited==1)]) & unvisited==1)[1]
+  right <- ifelse(current %% 80 == 0, 0, current + 1)
+  down <- ifelse(current %in% (6321:6400), 0, current + 80)  #we are only permitted to go down or go right, if either of these don't exist they aren't included in our connected nodes vector 
+  connected_nodes <- c(down,right)
+  for(i in 1:length(which(connected_nodes != 0))){
+    j <- connected_nodes[i]
+    costs[j] <- min(costs[j] , costs[current] + grid[j])
+  }
+  unvisited[current] <- 0  #we have completed our work for that node 
+  if(current == end) break  #finished when we populate the end node 
+}
+costs[80,80]  #our answer 
