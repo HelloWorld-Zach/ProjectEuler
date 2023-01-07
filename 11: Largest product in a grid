@@ -1,0 +1,44 @@
+library(tidyverse)
+grid <- readLines("20x20.txt")
+griddy <- array(0, dim = c(20,20))
+for(i in 1:20){
+  griddy[i,] <- as.integer(str_split(grid[i], " ")[[1]])
+}
+#up - down
+up <- c()
+for(i in 1:20)
+  for(j in 1:17)
+    up <- c(up, prod(griddy[j:(j+3),i]))
+one = max(up) 
+
+
+#left -right
+leftright <- c()
+for(i in 1:20)
+  for(j in 1:17)
+    leftright <- c(leftright, prod(griddy[i,j:(j+3)]))
+two = max(leftright) 
+
+
+#diagonal 
+maxfinder <- function(x){
+  if(length(x) < 4){
+    return(0)
+  }
+  else {
+    result <- c()
+    for(i in 1:(length(x)-3)){
+      result <- c(result, prod(x[i:(i+3)]))
+    }
+    return(max(result))
+  }
+  
+}
+d <- row(griddy) - col(griddy)
+normal <- split(griddy, d)
+a <- row(griddy) + col(griddy)
+reverse <- split(griddy, a)
+
+diagresult = max(map_dbl(c(normal, reverse), ~maxfinder(.)))
+
+max(one, two, diagresult) #ANSWER
