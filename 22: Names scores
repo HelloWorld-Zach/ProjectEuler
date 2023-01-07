@@ -1,0 +1,7 @@
+# Names scores
+
+library(tidyverse)
+
+input <- tibble(names = str_to_lower(str_sort(str_extract_all(readLines("names.txt"), "[:upper:]+")[[1]]))) %>% mutate(score = map_dbl(1:5163, ~ prod((.), sum(match(str_split(input$names[.], "")[[1]], letters[1:26])))))
+
+input %>% pull(score) %>% sum() #ANSWER 
