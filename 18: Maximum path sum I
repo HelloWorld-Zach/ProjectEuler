@@ -1,0 +1,21 @@
+# Maximum path sum I
+
+setwd("C:/Users/15517/Downloads")
+library(tidyverse)
+library(R.utils)
+library(tictoc)
+input <- readLines("pathsum_18.txt")
+tree <- intToBin(0:(2 ^ 14 - 1))
+nums <- c()
+for(i in 1:15){
+ nums <- c(nums, as.integer(str_split(input[i], " ")[[1]])) 
+}
+
+pathsum <- function(x) sum(nums[cumsum(c(1, map_dbl(seq_len(14), ~  ifelse(substr(tree[x], (.), (.)) == "1", (.) + 1, (.)))))])
+  
+tictoc::tic()
+max(map_dbl(seq_len(2^14), ~pathsum(.))) #ANSWER
+tictoc::toc() 
+
+# 3.09 sec elapsed
+
